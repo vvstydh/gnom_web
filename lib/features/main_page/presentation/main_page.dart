@@ -30,7 +30,7 @@ class MainPage extends StatelessWidget {
                 TextButton(
                     onPressed: () => context.go('/auth'),
                     child: Text(
-                      passCheck.email == null ? 'Аккаунт' : passCheck.email,
+                      'Аккаунт',
                       style: const TextStyle(fontSize: 25, color: Colors.white),
                     ))
               ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
+import 'package:web_gnom/features/auth/presentation/auth.dart';
 import 'package:web_gnom/features/regist/presentation/widgets/alert_reg.dart';
 
 class Regist extends StatelessWidget {
@@ -23,7 +24,7 @@ class Regist extends StatelessWidget {
               child: Center(
                   child: Container(
             padding: const EdgeInsets.all(30),
-            height: 550,
+            height: 600,
             width: 750,
             decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 240, 49, 94),
@@ -66,6 +67,7 @@ class Regist extends StatelessWidget {
                   onChanged: (value) {
                     passCheck.email = value;
                   },
+                  maxLength: 30,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                       hintText: 'Введите почту',
@@ -79,6 +81,7 @@ class Regist extends StatelessWidget {
                     onChanged: (value) {
                       passCheck.pass = value;
                     },
+                    maxLength: 30,
                     obscureText: passCheck.passVisib,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
@@ -101,6 +104,7 @@ class Regist extends StatelessWidget {
                     onChanged: (value) {
                       passCheck.secondpass = value;
                     },
+                    maxLength: 30,
                     obscureText: passCheck.passVisib,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(

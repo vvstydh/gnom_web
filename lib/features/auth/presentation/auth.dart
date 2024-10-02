@@ -23,7 +23,7 @@ class Auth extends StatelessWidget {
               child: Center(
                   child: Container(
             padding: const EdgeInsets.all(30),
-            height: 350,
+            height: 390,
             width: 750,
             decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 240, 49, 94),
@@ -42,6 +42,7 @@ class Auth extends StatelessWidget {
                   onChanged: (value) {
                     passCheck.enterEmail = value;
                   },
+                  maxLength: 30,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                       hintText: 'Введите почту',
@@ -55,6 +56,7 @@ class Auth extends StatelessWidget {
                     onChanged: (value) {
                       passCheck.enterPass = value;
                     },
+                    maxLength: 30,
                     obscureText: passCheck.passVisib,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
