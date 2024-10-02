@@ -97,7 +97,6 @@ class Auth extends StatelessWidget {
                                     alertText: 'Такого аккаунта нет!',
                                   ));
                         }
-                        ;
                       },
                       child: const Text(
                         'Войти',

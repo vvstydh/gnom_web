@@ -31,7 +31,7 @@ class MainPage extends StatelessWidget {
                     onPressed: () => context.go('/auth'),
                     child: Text(
                       passCheck.email == null ? 'Аккаунт' : passCheck.email,
-                      style: TextStyle(fontSize: 25, color: Colors.white),
+                      style: const TextStyle(fontSize: 25, color: Colors.white),
                     ))
               ],
             ),
