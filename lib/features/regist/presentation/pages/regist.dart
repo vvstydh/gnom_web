@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
-import 'package:web_gnom/features/auth/presentation/auth.dart';
 import 'package:web_gnom/features/regist/presentation/widgets/alert_reg.dart';
 
 class Regist extends StatelessWidget {
