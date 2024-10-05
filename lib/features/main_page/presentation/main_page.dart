@@ -30,7 +30,7 @@ class MainPage extends StatelessWidget {
                 TextButton(
                     onPressed: () => context.go('/auth'),
                     child: const Text(
-                      'Аккаун',
+                      'Аккаунт',
                       style: TextStyle(fontSize: 25, color: Colors.white),
                     ))
               ],
