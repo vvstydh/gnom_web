@@ -20,7 +20,7 @@ class MainPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'ДОМ ГНОМ',
+                  'ДОМ ГНОМА',
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
