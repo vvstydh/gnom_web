@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
+import 'package:web_gnom/core/app/store/gnoms_list/gnoms_list.dart';
+import 'package:web_gnom/core/widgets/list_item.dart';
 
 class MainPage extends StatelessWidget {
-  const MainPage({super.key, required this.passCheck});
+  const MainPage({super.key, required this.passCheck, required this.gnomList});
   final AuthTech passCheck;
+  final GnomsList gnomList;
 
   @override
   Widget build(BuildContext context) {
@@ -22,58 +26,70 @@ class MainPage extends StatelessWidget {
                 const Text(
                   'ДОМ ГНОМА',
                   style: TextStyle(
+                    fontFamily: 'Nekst',
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 240, 49, 94),
                   ),
                 ),
                 TextButton(
-                    onPressed: () => context.go('/auth'),
+                    onPressed: () {
+                      if (passCheck.isUser) {
+                        context.go('/user_page');
+                      } else {
+                        context.go('/auth');
+                      }
+                    },
                     child: const Text(
                       'Аккаунт',
-                      style: TextStyle(fontSize: 25, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontFamily: 'Nekst',
+                      ),
                     ))
               ],
             ),
           ),
           Expanded(
-              child: ListView.builder(
-                  itemCount: 100,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
-                      margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
-                      padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {}, child: const Text('image')),
-                          ElevatedButton(
-                              onPressed: () {}, child: const Text('button'))
-                        ],
-                      ),
-                    );
-                  })),
-          Row(
-            children: [
-              Container(
-                  color: const Color.fromARGB(255, 199, 199, 199),
-                  height: 70,
-                  child: TextButton(
+              child: Observer(
+                  builder: (_) => ListView.builder(
+                      itemCount: gnomList.gnomPath.length,
+                      itemBuilder: (context, index) {
+                        return ListItem(
+                          path: gnomList.gnomPath[index],
+                          name: gnomList.gnomName[index],
+                        );
+                      }))),
+          Container(
+              color: const Color.fromARGB(255, 199, 199, 199),
+              height: 70,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
                       onPressed: () {},
                       child: const Text(
                         'Контакты',
+                        style: TextStyle(
+                          fontFamily: 'Nekst',
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
+                          color: Color.fromARGB(255, 240, 49, 94),
+                        ),
+                      )),
+                  TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        '',
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w700,
                           color: Color.fromARGB(255, 240, 49, 94),
                         ),
-                      )))
-            ],
-          )
+                      ))
+                ],
+              ))
         ],
       ),
     );

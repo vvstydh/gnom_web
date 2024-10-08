@@ -15,9 +15,22 @@ class Regist extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Text(
-            'ДОМ ГНОМА',
-            style: TextStyle(fontSize: 100, color: Colors.white),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0),
+                side: const BorderSide(color: Colors.transparent),
+              ),
+            ),
+            onPressed: () => context.go('/'),
+            child: const Text(
+              'ДОМ ГНОМА',
+              style: TextStyle(
+                  fontFamily: 'Nekst', fontSize: 100, color: Colors.white),
+            ),
           ),
           Expanded(
               child: Center(
@@ -33,7 +46,8 @@ class Regist extends StatelessWidget {
               children: [
                 const Text(
                   'Регистрация',
-                  style: TextStyle(fontSize: 35, color: Colors.white),
+                  style: TextStyle(
+                      fontFamily: 'Nekst', fontSize: 35, color: Colors.white),
                 ),
                 const SizedBox(
                   height: 15,
@@ -45,7 +59,8 @@ class Regist extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                       hintText: 'Введите фамилию',
-                      hintStyle: TextStyle(color: Colors.white)),
+                      hintStyle:
+                          TextStyle(fontFamily: 'Nekst', color: Colors.white)),
                 ),
                 const SizedBox(
                   height: 15,
@@ -57,7 +72,8 @@ class Regist extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                       hintText: 'Введите имя',
-                      hintStyle: TextStyle(color: Colors.white)),
+                      hintStyle:
+                          TextStyle(fontFamily: 'Nekst', color: Colors.white)),
                 ),
                 const SizedBox(
                   height: 15,
@@ -70,7 +86,8 @@ class Regist extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                       hintText: 'Введите почту',
-                      hintStyle: TextStyle(color: Colors.white)),
+                      hintStyle:
+                          TextStyle(fontFamily: 'Nekst', color: Colors.white)),
                 ),
                 const SizedBox(
                   height: 15,
@@ -85,7 +102,8 @@ class Regist extends StatelessWidget {
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         hintText: 'Введите пароль',
-                        hintStyle: const TextStyle(color: Colors.white),
+                        hintStyle: const TextStyle(
+                            fontFamily: 'Nekst', color: Colors.white),
                         suffixIcon: IconButton(
                             onPressed: () {
                               passCheck.changerPass();
@@ -108,7 +126,8 @@ class Regist extends StatelessWidget {
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         hintText: 'Повторите пароль',
-                        hintStyle: const TextStyle(color: Colors.white),
+                        hintStyle: const TextStyle(
+                            fontFamily: 'Nekst', color: Colors.white),
                         suffixIcon: IconButton(
                             onPressed: () {
                               passCheck.changerPass();
@@ -128,7 +147,8 @@ class Regist extends StatelessWidget {
                     },
                     child: const Text(
                       'Назад',
-                      style: TextStyle(color: Colors.white),
+                      style:
+                          TextStyle(fontFamily: 'Nekst', color: Colors.white),
                     )),
                 const SizedBox(
                   height: 15,
@@ -161,6 +181,7 @@ class Regist extends StatelessWidget {
                       child: const Text(
                         'Зарегистрироваться',
                         style: TextStyle(
+                          fontFamily: 'Nekst',
                           color: Color.fromARGB(255, 240, 49, 94),
                         ),
                       )),

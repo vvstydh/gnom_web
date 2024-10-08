@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:web_gnom/core/app/store/auth.dart/user_data.dart';
 
 part 'auth.g.dart';
 
@@ -33,6 +34,9 @@ abstract class AuthTechStore with Store {
   @observable
   bool isUser = false;
 
+  @observable
+  ObservableList<UserData> userData = ObservableList<UserData>();
+
   @action
   void changerPass() {
     passVisib = !passVisib;
@@ -63,9 +67,16 @@ abstract class AuthTechStore with Store {
         .eq('pass', passForEnter)
         .maybeSingle();
 
-    if (response == null) {
+    if (response != null) {
+      isUser = true;
+    } else {
       isUser = false;
     }
-    isUser = true;
+  }
+
+  Future<void> userAccData() async {
+    final response = await Supabase.instance.client.from('auth').select();
+    
+    print(response);
   }
 }

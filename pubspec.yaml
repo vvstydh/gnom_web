@@ -25,3 +25,14 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/empty.png
+    - assets/images/gnom1.jpeg
+    - assets/images/gnom2.jpeg
+
+
+  fonts:
+    - family: Nekst
+      fonts:
+        - asset: assets/fonts/Nekst-Regular.ttf

@@ -4,7 +4,6 @@ import 'package:web_gnom/core/app/routes/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Supabase.initialize(
     url: 'https://jwepwetnsbpefkwswabn.supabase.co',
     anonKey:

@@ -150,6 +150,22 @@ mixin _$AuthTech on AuthTechStore, Store {
     });
   }
 
+  late final _$userDataAtom =
+      Atom(name: 'AuthTechStore.userData', context: context);
+
+  @override
+  ObservableList<UserData> get userData {
+    _$userDataAtom.reportRead();
+    return super.userData;
+  }
+
+  @override
+  set userData(ObservableList<UserData> value) {
+    _$userDataAtom.reportWrite(value, super.userData, () {
+      super.userData = value;
+    });
+  }
+
   late final _$doesUserExistAsyncAction =
       AsyncAction('AuthTechStore.doesUserExist', context: context);
 
@@ -184,7 +200,8 @@ surname: ${surname},
 email: ${email},
 enterPass: ${enterPass},
 enterEmail: ${enterEmail},
-isUser: ${isUser}
+isUser: ${isUser},
+userData: ${userData}
     ''';
   }
 }
