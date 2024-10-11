@@ -4,7 +4,7 @@ import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
 import 'package:web_gnom/core/app/store/gnoms_list/gnoms_list.dart';
 import 'package:web_gnom/features/auth/presentation/auth.dart';
 import 'package:web_gnom/features/main_page/data/gnom_db.dart';
-import 'package:web_gnom/features/main_page/presentation/main_page.dart';
+import 'package:web_gnom/features/main_page/presentation/pages/main_page.dart';
 import 'package:web_gnom/features/regist/presentation/pages/regist.dart';
 import 'package:web_gnom/features/user_page/presentation/pages/user_page.dart';
 
@@ -18,6 +18,7 @@ class MainApp extends StatelessWidget {
     final gnom = GnomDb(gnomList: gnomList);
     gnom.fetchGnomsPath();
     gnom.fetchGnomsNames();
+    gnom.fetchGnomsPrices();
     final router = GoRouter(routes: [
       GoRoute(
         path: '/',
@@ -40,7 +41,9 @@ class MainApp extends StatelessWidget {
       ),
       GoRoute(
         path: '/user_page',
-        builder: (context, state) => const UserPage(),
+        builder: (context, state) => UserPage(
+          userData: passCheck,
+        ),
       )
     ]);
     return MaterialApp.router(

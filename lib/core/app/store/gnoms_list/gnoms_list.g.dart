@@ -41,11 +41,28 @@ mixin _$GnomsList on GnomsListStore, Store {
     });
   }
 
+  late final _$gnomPriceAtom =
+      Atom(name: 'GnomsListStore.gnomPrice', context: context);
+
+  @override
+  ObservableList<String> get gnomPrice {
+    _$gnomPriceAtom.reportRead();
+    return super.gnomPrice;
+  }
+
+  @override
+  set gnomPrice(ObservableList<String> value) {
+    _$gnomPriceAtom.reportWrite(value, super.gnomPrice, () {
+      super.gnomPrice = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 gnomPath: ${gnomPath},
-gnomName: ${gnomName}
+gnomName: ${gnomName},
+gnomPrice: ${gnomPrice}
     ''';
   }
 }

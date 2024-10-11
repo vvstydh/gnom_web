@@ -10,4 +10,7 @@ abstract class GnomsListStore with Store {
 
   @observable
   ObservableList<String> gnomName = ObservableList<String>();
+
+  @observable
+  ObservableList<String> gnomPrice = ObservableList<String>();
 }

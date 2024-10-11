@@ -13,6 +13,7 @@ class GnomDb {
     final gnomNames = data.map((gnom) => gnom['path'] as String).toList();
     gnomList.gnomPath.clear();
     gnomList.gnomPath.addAll(gnomNames);
+    
   }
 
   Future<void> fetchGnomsNames() async {
@@ -22,5 +23,14 @@ class GnomDb {
     final gnomNames = data.map((gnom) => gnom['name'] as String).toList();
     gnomList.gnomName.clear();
     gnomList.gnomName.addAll(gnomNames);
+  }
+
+  Future<void> fetchGnomsPrices() async {
+    final response =
+        await Supabase.instance.client.from('gnoms').select('price');
+    final data = response as List<dynamic>;
+    final gnomNames = data.map((gnom) => gnom['price'] as String).toList();
+    gnomList.gnomPrice.clear();
+    gnomList.gnomPrice.addAll(gnomNames);
   }
 }

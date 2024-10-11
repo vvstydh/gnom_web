@@ -15,7 +15,6 @@ dependencies:
   flutter_mobx: ^2.2.1+1
   supabase_flutter: ^2.7.0
   app_links: ^3.2.0
-  objectbox: ^4.0.2
 
 dev_dependencies:
   flutter_test:
@@ -30,7 +29,13 @@ flutter:
     - assets/images/empty.png
     - assets/images/gnom1.jpeg
     - assets/images/gnom2.jpeg
-
+    - assets/images/gnom3.jpeg
+    - assets/images/gnom4.jpeg
+    - assets/images/gnom5.jpeg
+    - assets/images/gnom6.jpeg
+    - assets/images/gnom7.jpeg
+    - assets/images/gnom8.jpeg
+    - assets/images/gnom9.jpeg
 
   fonts:
     - family: Nekst

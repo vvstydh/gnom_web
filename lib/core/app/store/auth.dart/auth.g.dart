@@ -102,6 +102,54 @@ mixin _$AuthTech on AuthTechStore, Store {
     });
   }
 
+  late final _$balanceAtom =
+      Atom(name: 'AuthTechStore.balance', context: context);
+
+  @override
+  int get balance {
+    _$balanceAtom.reportRead();
+    return super.balance;
+  }
+
+  @override
+  set balance(int value) {
+    _$balanceAtom.reportWrite(value, super.balance, () {
+      super.balance = value;
+    });
+  }
+
+  late final _$balanceAdditionAtom =
+      Atom(name: 'AuthTechStore.balanceAddition', context: context);
+
+  @override
+  int get balanceAddition {
+    _$balanceAdditionAtom.reportRead();
+    return super.balanceAddition;
+  }
+
+  @override
+  set balanceAddition(int value) {
+    _$balanceAdditionAtom.reportWrite(value, super.balanceAddition, () {
+      super.balanceAddition = value;
+    });
+  }
+
+  late final _$totalpriceAtom =
+      Atom(name: 'AuthTechStore.totalprice', context: context);
+
+  @override
+  int get totalprice {
+    _$totalpriceAtom.reportRead();
+    return super.totalprice;
+  }
+
+  @override
+  set totalprice(int value) {
+    _$totalpriceAtom.reportWrite(value, super.totalprice, () {
+      super.totalprice = value;
+    });
+  }
+
   late final _$enterPassAtom =
       Atom(name: 'AuthTechStore.enterPass', context: context);
 
@@ -150,19 +198,19 @@ mixin _$AuthTech on AuthTechStore, Store {
     });
   }
 
-  late final _$userDataAtom =
-      Atom(name: 'AuthTechStore.userData', context: context);
+  late final _$usersCartAtom =
+      Atom(name: 'AuthTechStore.usersCart', context: context);
 
   @override
-  ObservableList<UserData> get userData {
-    _$userDataAtom.reportRead();
-    return super.userData;
+  ObservableList<String> get usersCart {
+    _$usersCartAtom.reportRead();
+    return super.usersCart;
   }
 
   @override
-  set userData(ObservableList<UserData> value) {
-    _$userDataAtom.reportWrite(value, super.userData, () {
-      super.userData = value;
+  set usersCart(ObservableList<String> value) {
+    _$usersCartAtom.reportWrite(value, super.usersCart, () {
+      super.usersCart = value;
     });
   }
 
@@ -198,10 +246,13 @@ secondpass: ${secondpass},
 name: ${name},
 surname: ${surname},
 email: ${email},
+balance: ${balance},
+balanceAddition: ${balanceAddition},
+totalprice: ${totalprice},
 enterPass: ${enterPass},
 enterEmail: ${enterEmail},
 isUser: ${isUser},
-userData: ${userData}
+usersCart: ${usersCart}
     ''';
   }
 }

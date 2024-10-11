@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
+import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
+import 'package:web_gnom/features/regist/presentation/widgets/alert_reg.dart';
+import 'package:web_gnom/features/user_page/presentation/widgets/alert_balance_addition.dart';
+import 'package:web_gnom/features/user_page/presentation/widgets/alert_user_page.dart';
+import 'package:web_gnom/features/user_page/presentation/widgets/cart_list_item.dart';
 
 class UserPage extends StatelessWidget {
-  const UserPage({super.key});
+  const UserPage({super.key, required this.userData});
+  final AuthTech userData;
 
   @override
   Widget build(BuildContext context) {
@@ -43,81 +50,181 @@ class UserPage extends StatelessWidget {
                       color: Color.fromARGB(255, 240, 49, 94),
                       borderRadius: BorderRadius.all(Radius.circular(30))),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Аккаунт',
-                        style: TextStyle(
+                      const Center(
+                        child: Text(
+                          'Аккаунт',
+                          style: TextStyle(
+                              fontFamily: 'Nekst',
+                              fontSize: 35,
+                              color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        'Имя: ${userData.name}',
+                        style: const TextStyle(
+                            fontSize: 25,
                             fontFamily: 'Nekst',
-                            fontSize: 35,
                             color: Colors.white),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
-                      TextField(
-                        onChanged: (value) {},
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                            hintText: 'Введите фамилию',
-                            hintStyle: TextStyle(
-                                fontFamily: 'Nekst', color: Colors.white)),
+                      Text(
+                        'Фамилия: ${userData.surname}',
+                        style: const TextStyle(
+                            fontSize: 25,
+                            fontFamily: 'Nekst',
+                            color: Colors.white),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
-                      TextField(
-                        onChanged: (value) {},
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                            hintText: 'Введите имя',
-                            hintStyle: TextStyle(
-                                fontFamily: 'Nekst', color: Colors.white)),
+                      Text(
+                        'Почта: ${userData.email}',
+                        style: const TextStyle(
+                            fontSize: 25,
+                            fontFamily: 'Nekst',
+                            color: Colors.white),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
-                      TextField(
-                        onChanged: (value) {},
-                        maxLength: 30,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                            hintText: 'Введите почту',
-                            hintStyle: TextStyle(
-                                fontFamily: 'Nekst', color: Colors.white)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Observer(
+                            builder: (_) => Text(
+                              'Баланс: ${userData.balance}',
+                              style: const TextStyle(
+                                  fontSize: 25,
+                                  fontFamily: 'Nekst',
+                                  color: Colors.white),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertBalanceAddition(
+                                        userData: userData,
+                                      ));
+                            },
+                            icon: const Icon(Icons.add),
+                            color: Colors.white,
+                          )
+                        ],
                       ),
                       const SizedBox(
                         height: 15,
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      TextButton(
-                          onPressed: () {
-                            context.go('/auth');
+                      Observer(
+                        builder: (_) => TextField(
+                          onChanged: (value) {
+                            userData.pass = value;
                           },
-                          child: const Text(
-                            'Назад',
-                            style: TextStyle(
-                                fontFamily: 'Nekst', color: Colors.white),
-                          )),
+                          maxLength: 30,
+                          obscureText: userData.passVisib,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                              hintText: 'Сменить пароль',
+                              hintStyle: const TextStyle(
+                                  fontFamily: 'Nekst', color: Colors.white),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    userData.changerPass();
+                                  },
+                                  icon: Icon(userData.passVisib
+                                      ? Icons.visibility_off
+                                      : Icons.remove_red_eye))),
+                        ),
+                      ),
                       const SizedBox(
                         height: 15,
+                      ),
+                      Observer(
+                        builder: (_) => TextField(
+                          onChanged: (value) {
+                            userData.secondpass = value;
+                          },
+                          maxLength: 30,
+                          obscureText: userData.passVisib,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                              hintText: 'Повторите пароль',
+                              hintStyle: const TextStyle(
+                                  fontFamily: 'Nekst', color: Colors.white),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    userData.changerPass();
+                                  },
+                                  icon: Icon(userData.passVisib
+                                      ? Icons.visibility_off
+                                      : Icons.remove_red_eye))),
+                        ),
                       ),
                       SizedBox(
-                        width: 500,
+                        width: 300,
                         height: 50,
                         child: ElevatedButton(
-                            onPressed: () async {},
+                            onPressed: () {
+                              if (userData.pass != userData.secondpass) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => const AlertReg(
+                                          alertText: 'Пароли не совпадают!',
+                                        ));
+                              } else if (userData.pass == '' ||
+                                  userData.secondpass == '') {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => const AlertReg(
+                                          alertText: 'Заполни все поля!',
+                                        ));
+                              } else {
+                                userData.changePassword();
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => const AlertReg(
+                                          alertText: 'Пароли поменяны!',
+                                        ));
+                              }
+                            },
                             child: const Text(
-                              'Зарегистрироваться',
+                              'Сменить пароль',
                               style: TextStyle(
                                 fontFamily: 'Nekst',
                                 color: Color.fromARGB(255, 240, 49, 94),
                               ),
+                            )),
+                      ),
+                      Expanded(child: Container()),
+                      Center(
+                        child: TextButton(
+                            onPressed: () {
+                              userData.clear();
+                              context.go('/');
+                            },
+                            child: const Text(
+                              'Выйти из аккаунта',
+                              style: TextStyle(
+                                  fontFamily: 'Nekst', color: Colors.white),
+                            )),
+                      ),
+                      Center(
+                        child: TextButton(
+                            onPressed: () {
+                              userData.deleteAccount();
+                              context.go('/');
+                            },
+                            child: const Text(
+                              'Удалить аккаунт',
+                              style: TextStyle(
+                                  fontFamily: 'Nekst', color: Colors.white),
                             )),
                       )
                     ],
@@ -125,10 +232,109 @@ class UserPage extends StatelessWidget {
                 )))
               ],
             ),
-            const Column(
+            Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [],
-            ), 
+              children: [
+                SizedBox(
+                    width: 700,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Козина',
+                          style: TextStyle(
+                              fontFamily: 'Nekst',
+                              fontSize: 50,
+                              color: Colors.white),
+                        ),
+                        Observer(
+                          builder: (_) => Text(
+                            'Всего товара на: ${userData.totalprice}\$',
+                            style: const TextStyle(
+                                fontFamily: 'Nekst',
+                                fontSize: 25,
+                                color: Colors.white),
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertUserPage(
+                                        alertText:
+                                            'Ты уверен. что хочешь отчистить корзину?',
+                                        userData: userData,
+                                      ));
+                            },
+                            icon: const Icon(
+                              size: 50,
+                              Icons.close_rounded,
+                              color: Colors.white,
+                            ))
+                      ],
+                    )),
+                const SizedBox(
+                  height: 10,
+                ),
+                Observer(
+                    builder: (_) => userData.usersCart.isNotEmpty
+                        ? SizedBox(
+                            width: 700,
+                            height: 550,
+                            child: Observer(
+                                builder: (_) => ListView.builder(
+                                    itemCount: userData.usersCart.length ~/ 3.0,
+                                    itemBuilder: (context, index) {
+                                      final baseIndex = index * 3;
+                                      return CartListItem(
+                                        path: userData.usersCart[baseIndex],
+                                        name: userData.usersCart[baseIndex + 1],
+                                        price:
+                                            userData.usersCart[baseIndex + 2],
+                                        userData: userData,
+                                        icon: Icons.cancel_rounded,
+                                        onClick: () {
+                                          userData.deleteCartItem(baseIndex);
+                                        },
+                                      );
+                                    })))
+                        : const SizedBox()),
+                Observer(
+                    builder: (_) => userData.usersCart.isNotEmpty
+                        ? Container(
+                            margin: const EdgeInsets.only(top: 15),
+                            height: 70,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  if (userData.balance >= userData.totalprice) {
+                                    userData.ordering();
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => const AlertReg(
+                                              alertText:
+                                                  'Заказ успешно оформлен, ждите, может когда-нибудь прийдет :(',
+                                            ));
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => const AlertReg(
+                                              alertText:
+                                                  'Недостаточно средств!',
+                                            ));
+                                  }
+                                },
+                                child: const Text(
+                                  'Оформить заказ',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontFamily: 'Nekst',
+                                    color: Color.fromARGB(255, 35, 27, 144),
+                                  ),
+                                )),
+                          )
+                        : const SizedBox()),
+              ],
+            ),
           ],
         ));
   }

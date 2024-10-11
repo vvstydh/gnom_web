@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
 import 'package:web_gnom/core/app/store/gnoms_list/gnoms_list.dart';
-import 'package:web_gnom/features/regist/presentation/widgets/alert_reg.dart';
+import 'package:web_gnom/features/main_page/presentation/widgets/alert_main.dart';
 import 'package:web_gnom/features/main_page/presentation/widgets/list_item.dart';
 
 class MainPage extends StatelessWidget {
@@ -74,9 +74,7 @@ class MainPage extends StatelessWidget {
                             } else {
                               showDialog(
                                   context: context,
-                                  builder: (context) => const AlertReg(
-                                        alertText: 'Зарегистрируйся!',
-                                      ));
+                                  builder: (context) => const AlertMain());
                             }
                           },
                         );

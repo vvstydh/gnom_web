@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
 
-class ListItem extends StatelessWidget {
-  const ListItem({super.key, required this.path, required this.name});
+class CartListItem extends StatelessWidget {
+  const CartListItem(
+      {super.key,
+      required this.path,
+      required this.name,
+      required this.price,
+      required this.userData,
+      required this.icon,
+      this.onClick});
   final String path;
   final String name;
+  final String price;
+  final AuthTech userData;
+  final IconData icon;
+  final VoidCallback? onClick;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +39,10 @@ class ListItem extends StatelessWidget {
                           bottomRight: Radius.circular(30),
                           topRight: Radius.circular(30),
                           bottomLeft: Radius.circular(30)),
-                      child: Image.asset(path))),
+                      child: Image.asset(
+                        path,
+                        fit: BoxFit.fill,
+                      ))),
               Container(
                   margin: const EdgeInsets.only(left: 25),
                   child: Row(
@@ -36,7 +51,7 @@ class ListItem extends StatelessWidget {
                       Text(
                         name,
                         style: const TextStyle(
-                          fontSize: 35,
+                          fontSize: 25,
                           fontFamily: 'Nekst',
                         ),
                       )
@@ -48,17 +63,15 @@ class ListItem extends StatelessWidget {
             children: [
               Container(
                 margin: const EdgeInsets.only(right: 15),
-                child: const Text(
-                  '200\$',
-                  style: TextStyle(
-                    fontSize: 35,
+                child: Text(
+                  '$price\$',
+                  style: const TextStyle(
+                    fontSize: 25,
                     fontFamily: 'Nekst',
                   ),
                 ),
               ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(size: 50, Icons.shopping_cart_rounded))
+              IconButton(onPressed: onClick, icon: Icon(size: 50, icon))
             ],
           )
         ],
