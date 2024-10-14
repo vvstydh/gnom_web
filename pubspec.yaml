@@ -36,6 +36,8 @@ flutter:
     - assets/images/gnom7.jpeg
     - assets/images/gnom8.jpeg
     - assets/images/gnom9.jpeg
+    - assets/images/gnom10.png
+    - assets/images/gnom11.png
 
   fonts:
     - family: Nekst

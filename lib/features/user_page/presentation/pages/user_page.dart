@@ -241,7 +241,7 @@ class UserPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Козина',
+                          'Корзина',
                           style: TextStyle(
                               fontFamily: 'Nekst',
                               fontSize: 50,
@@ -294,7 +294,11 @@ class UserPage extends StatelessWidget {
                                         userData: userData,
                                         icon: Icons.cancel_rounded,
                                         onClick: () {
-                                          userData.deleteCartItem(baseIndex);
+                                          if (userData.usersCart.length == 3) {
+                                            userData.clearCart();
+                                          } else {
+                                            userData.deleteCartItem(baseIndex);
+                                          }
                                         },
                                       );
                                     })))
@@ -312,7 +316,7 @@ class UserPage extends StatelessWidget {
                                         context: context,
                                         builder: (context) => const AlertReg(
                                               alertText:
-                                                  'Заказ успешно оформлен, ждите, может когда-нибудь прийдет :(',
+                                                  'Заказ успешно оформлен, ждите, может когда-нибудь придет :(',
                                             ));
                                   } else {
                                     showDialog(
