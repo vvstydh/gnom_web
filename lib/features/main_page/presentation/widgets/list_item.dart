@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
+import 'package:web_gnom/core/app/store/auth/user_data.dart';
 
 class ListItem extends StatelessWidget {
   const ListItem(
@@ -12,7 +12,7 @@ class ListItem extends StatelessWidget {
   final String path;
   final String name;
   final String price;
-  final AuthTech userData;
+  final UserData userData;
   final IconData icon;
   final VoidCallback? onClick;
 

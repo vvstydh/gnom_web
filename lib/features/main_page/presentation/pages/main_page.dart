@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
-import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
+import 'package:web_gnom/core/app/store/auth/user_data.dart';
+import 'package:web_gnom/core/app/store/cart/cart.dart';
 import 'package:web_gnom/core/app/store/gnoms_list/gnoms_list.dart';
-import 'package:web_gnom/features/main_page/presentation/widgets/alert_main.dart';
 import 'package:web_gnom/features/main_page/presentation/widgets/list_item.dart';
 
 class MainPage extends StatelessWidget {
-  const MainPage({super.key, required this.passCheck, required this.gnomList});
-  final AuthTech passCheck;
+  final UserData userData;
+  final Cart cart;
   final GnomsList gnomList;
+
+  const MainPage({
+    required this.userData,
+    required this.cart,
+    required this.gnomList,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,52 +39,73 @@ class MainPage extends StatelessWidget {
                     color: Color.fromARGB(255, 240, 49, 94),
                   ),
                 ),
-                TextButton(
-                    onPressed: () {
-                      if (passCheck.isUser) {
-                        passCheck.fetchCart();
-                        context.go('/user_page');
-                      } else {
-                        context.go('/auth');
-                      }
-                    },
-                    child: const Text(
-                      'Аккаунт',
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontFamily: 'Nekst',
-                      ),
-                    ))
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          userData.getCart();
+                          context.go('/cart');
+                        },
+                        icon: const Icon(
+                          size: 30,
+                          color: Colors.white,
+                          Icons.shopping_cart_rounded,
+                        )),
+                    TextButton(
+                        onPressed: () {
+                          if (userData.user != null) {
+                            context.go('/user_page');
+                          } else {
+                            context.go('/auth');
+                          }
+                        },
+                        child: const Text(
+                          'Аккаунт',
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontFamily: 'Nekst',
+                          ),
+                        ))
+                  ],
+                )
               ],
             ),
           ),
           Expanded(
-              child: Observer(
-                  builder: (_) => ListView.builder(
-                      itemCount: gnomList.gnomPath.length,
-                      itemBuilder: (context, index) {
-                        return ListItem(
-                          path: gnomList.gnomPath[index],
-                          name: gnomList.gnomName[index],
-                          price: gnomList.gnomPrice[index],
-                          userData: passCheck,
-                          icon: Icons.shopping_cart_rounded,
-                          onClick: () {
-                            if (passCheck.isUser) {
-                              passCheck.addToCart(
-                                gnomList.gnomPath[index],
-                                gnomList.gnomName[index],
-                                gnomList.gnomPrice[index],
-                              );
-                            } else {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => const AlertMain());
-                            }
-                          },
-                        );
-                      }))),
+              child: ListView.builder(
+                  itemCount: userData.imagePath.length,
+                  itemBuilder: (context, index) {
+                    return ListItem(
+                      path: userData.imagePath[index],
+                      name: userData.namePath[index],
+                      price: userData.pricePath[index],
+                      userData: userData,
+                      icon: Icons.shopping_cart_rounded,
+                      onClick: () async {
+                        if (userData.user != null) {
+                          final isInCart = await cart.addToCart(
+                            userData.user?.id,
+                            userData.imagePath[index],
+                            userData.namePath[index],
+                            userData.pricePath[index],
+                          );
+                          if (isInCart) {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Товар добавлен в корзину')));
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Товар уже есть в корзине')));
+                          }
+                          userData.getCart();
+                        }
+                      },
+                    );
+                  })),
           Container(
               color: const Color.fromARGB(255, 199, 199, 199),
               height: 70,
@@ -86,7 +113,9 @@ class MainPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        userData.signOut();
+                      },
                       child: const Text(
                         'Контакты',
                         style: TextStyle(

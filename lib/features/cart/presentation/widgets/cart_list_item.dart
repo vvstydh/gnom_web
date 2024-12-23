@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
+import 'package:web_gnom/core/app/store/auth/user_data.dart';
 
 class CartListItem extends StatelessWidget {
   const CartListItem(
@@ -9,13 +9,19 @@ class CartListItem extends StatelessWidget {
       required this.price,
       required this.userData,
       required this.icon,
-      this.onClick});
+      this.onClick,
+      required this.count,
+      this.onClickPlus,
+      this.onClickMinus});
   final String path;
   final String name;
   final String price;
-  final AuthTech userData;
+  final String count;
+  final UserData userData;
   final IconData icon;
   final VoidCallback? onClick;
+  final VoidCallback? onClickPlus;
+  final VoidCallback? onClickMinus;
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +67,24 @@ class CartListItem extends StatelessWidget {
           ),
           Row(
             children: [
+              IconButton(
+                  onPressed: onClickMinus,
+                  icon: const Icon(size: 50, Icons.remove_rounded)),
               Container(
-                margin: const EdgeInsets.only(right: 15),
+                margin: const EdgeInsets.only(right: 15, left: 15),
+                child: Text(
+                  count,
+                  style: const TextStyle(
+                    fontSize: 25,
+                    fontFamily: 'Nekst',
+                  ),
+                ),
+              ),
+              IconButton(
+                  onPressed: onClickPlus,
+                  icon: const Icon(size: 50, Icons.add_rounded)),
+              Container(
+                margin: const EdgeInsets.only(right: 15, left: 15),
                 child: Text(
                   '$price\$',
                   style: const TextStyle(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
-import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
+import 'package:web_gnom/core/app/store/auth/user_data.dart';
 import 'package:web_gnom/features/regist/presentation/widgets/alert_reg.dart';
 
 class Regist extends StatelessWidget {
-  const Regist({super.key, required this.passCheck});
-  final AuthTech passCheck;
+  const Regist({super.key, required this.registration});
+  final UserData registration;
 
   @override
   Widget build(BuildContext context) {
@@ -50,25 +50,11 @@ class Regist extends StatelessWidget {
                       fontFamily: 'Nekst', fontSize: 35, color: Colors.white),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 7,
                 ),
                 TextField(
-                  onChanged: (value) {
-                    passCheck.surname = value;
-                  },
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                      hintText: 'Введите фамилию',
-                      hintStyle:
-                          TextStyle(fontFamily: 'Nekst', color: Colors.white)),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                TextField(
-                  onChanged: (value) {
-                    passCheck.name = value;
-                  },
+                  controller: registration.name,
+                  maxLength: 30,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                       hintText: 'Введите имя',
@@ -76,12 +62,22 @@ class Regist extends StatelessWidget {
                           TextStyle(fontFamily: 'Nekst', color: Colors.white)),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 7,
                 ),
                 TextField(
-                  onChanged: (value) {
-                    passCheck.email = value;
-                  },
+                  controller: registration.surname,
+                  maxLength: 30,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                      hintText: 'Введите фамилию',
+                      hintStyle:
+                          TextStyle(fontFamily: 'Nekst', color: Colors.white)),
+                ),
+                const SizedBox(
+                  height: 7,
+                ),
+                TextField(
+                  controller: registration.login,
                   maxLength: 30,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
@@ -90,15 +86,13 @@ class Regist extends StatelessWidget {
                           TextStyle(fontFamily: 'Nekst', color: Colors.white)),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 7,
                 ),
                 Observer(
                   builder: (_) => TextField(
-                    onChanged: (value) {
-                      passCheck.pass = value;
-                    },
+                    controller: registration.password,
                     maxLength: 30,
-                    obscureText: passCheck.passVisib,
+                    obscureText: registration.passVisib,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         hintText: 'Введите пароль',
@@ -106,23 +100,21 @@ class Regist extends StatelessWidget {
                             fontFamily: 'Nekst', color: Colors.white),
                         suffixIcon: IconButton(
                             onPressed: () {
-                              passCheck.changerPass();
+                              registration.changerPass();
                             },
-                            icon: Icon(passCheck.passVisib
+                            icon: Icon(registration.passVisib
                                 ? Icons.visibility_off
                                 : Icons.remove_red_eye))),
                   ),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 7,
                 ),
                 Observer(
                   builder: (_) => TextField(
-                    onChanged: (value) {
-                      passCheck.secondpass = value;
-                    },
+                    controller: registration.checkPassword,
                     maxLength: 30,
-                    obscureText: passCheck.passVisib,
+                    obscureText: registration.passVisib,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         hintText: 'Повторите пароль',
@@ -130,19 +122,19 @@ class Regist extends StatelessWidget {
                             fontFamily: 'Nekst', color: Colors.white),
                         suffixIcon: IconButton(
                             onPressed: () {
-                              passCheck.changerPass();
+                              registration.changerPass();
                             },
-                            icon: Icon(passCheck.passVisib
+                            icon: Icon(registration.passVisib
                                 ? Icons.visibility_off
                                 : Icons.remove_red_eye))),
                   ),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 7,
                 ),
                 TextButton(
                     onPressed: () {
-                      passCheck.clear();
+                      registration.clear();
                       context.go('/auth');
                     },
                     child: const Text(
@@ -151,31 +143,33 @@ class Regist extends StatelessWidget {
                           TextStyle(fontFamily: 'Nekst', color: Colors.white),
                     )),
                 const SizedBox(
-                  height: 15,
+                  height: 7,
                 ),
                 SizedBox(
                   width: 500,
                   height: 50,
                   child: ElevatedButton(
                       onPressed: () async {
-                        if (passCheck.pass != passCheck.secondpass) {
+                        if (registration.password.text !=
+                            registration.checkPassword.text) {
                           showDialog(
                               context: context,
                               builder: (context) => const AlertReg(
                                     alertText: 'Пароли не совпадают!',
                                   ));
-                        } else if (passCheck.pass == '' ||
-                            passCheck.name == '' ||
-                            passCheck.email == '' ||
-                            passCheck.surname == '') {
+                        } else if (registration.name.text.isEmpty ||
+                            registration.surname.text.isEmpty ||
+                            registration.password.text.isEmpty ||
+                            registration.checkPassword.text.isEmpty ||
+                            registration.login.text.isEmpty) {
                           showDialog(
                               context: context,
                               builder: (context) => const AlertReg(
                                     alertText: 'Заполни все поля!',
                                   ));
                         } else {
-                          passCheck.auth();
-                          context.go('/auth');
+                          registration.signUp();
+                          context.go('/');
                         }
                       },
                       child: const Text(

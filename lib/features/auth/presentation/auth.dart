@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
-import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
-import 'package:web_gnom/features/regist/presentation/widgets/alert_reg.dart';
+import 'package:web_gnom/core/app/store/auth/user_data.dart';
 
 class Auth extends StatelessWidget {
-  const Auth({super.key, required this.passCheck});
-  final AuthTech passCheck;
+  const Auth({super.key, required this.authentification});
+  final UserData authentification;
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +52,7 @@ class Auth extends StatelessWidget {
                   height: 15,
                 ),
                 TextField(
-                  onChanged: (value) {
-                    passCheck.enterEmail = value;
-                    passCheck.doesUserExist(
-                        passCheck.enterEmail, passCheck.enterPass);
-                  },
+                  controller: authentification.login,
                   maxLength: 30,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
@@ -70,13 +65,9 @@ class Auth extends StatelessWidget {
                 ),
                 Observer(
                   builder: (_) => TextField(
-                    onChanged: (value) {
-                      passCheck.enterPass = value;
-                      passCheck.doesUserExist(
-                          passCheck.enterEmail, passCheck.enterPass);
-                    },
+                    controller: authentification.password,
                     maxLength: 30,
-                    obscureText: passCheck.passVisib,
+                    obscureText: authentification.passVisib,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         hintText: 'Введите пароль',
@@ -84,9 +75,9 @@ class Auth extends StatelessWidget {
                             fontFamily: 'Nekst', color: Colors.white),
                         suffixIcon: IconButton(
                             onPressed: () {
-                              passCheck.changerPass();
+                              authentification.changerPass();
                             },
-                            icon: Icon(passCheck.passVisib
+                            icon: Icon(authentification.passVisib
                                 ? Icons.visibility_off
                                 : Icons.remove_red_eye))),
                   ),
@@ -95,7 +86,9 @@ class Auth extends StatelessWidget {
                   height: 15,
                 ),
                 TextButton(
-                    onPressed: () => context.go('/regist'),
+                    onPressed: () {
+                      context.go('/regist');
+                    },
                     child: const Text(
                       'Зарегистрироваться',
                       style:
@@ -108,16 +101,26 @@ class Auth extends StatelessWidget {
                   width: 500,
                   height: 50,
                   child: ElevatedButton(
-                      onPressed: () {
-                        if (!passCheck.isUser) {
-                          showDialog(
-                              context: context,
-                              builder: (context) => const AlertReg(
-                                    alertText: 'Такого аккаунта нет!',
-                                  ));
-                        } else {
-                          passCheck.getUserByEmail(passCheck.enterEmail);
-                          context.go('/');
+                      onPressed: () async {
+                        try {
+                          await authentification.signIn();
+                          if (authentification.user == null) {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Неверный логин или пароль')));
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            context.go('/');
+                          }
+                        } catch (error) {
+                          // Show error message to user
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Ошибка входа: ${error.toString()}'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
                         }
                       },
                       child: const Text(

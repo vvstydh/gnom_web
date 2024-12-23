@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:web_gnom/core/app/store/auth.dart/auth.dart';
 
-class AlertUserPage extends StatelessWidget {
-  const AlertUserPage({super.key, required this.alertText, required this.userData});
+class AlertClearCart extends StatelessWidget {
+  const AlertClearCart({super.key, required this.alertText, this.onClick});
   final String alertText;
-  final AuthTech userData;
+  final VoidCallback? onClick;
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +23,7 @@ class AlertUserPage extends StatelessWidget {
               style: TextStyle(fontSize: 20, color: Colors.white),
             )),
         TextButton(
-            onPressed: () {
-              userData.clearCart();
-              Navigator.pop(context);
-            },
+            onPressed: onClick,
             child: const Text(
               'Да',
               style: TextStyle(fontSize: 20, color: Colors.white),
