@@ -198,6 +198,38 @@ mixin _$UserData on UserDataStore, Store {
     });
   }
 
+  late final _$newAvatarAtom =
+      Atom(name: 'UserDataStore.newAvatar', context: context);
+
+  @override
+  String get newAvatar {
+    _$newAvatarAtom.reportRead();
+    return super.newAvatar;
+  }
+
+  @override
+  set newAvatar(String value) {
+    _$newAvatarAtom.reportWrite(value, super.newAvatar, () {
+      super.newAvatar = value;
+    });
+  }
+
+  late final _$avatarIndexAtom =
+      Atom(name: 'UserDataStore.avatarIndex', context: context);
+
+  @override
+  int get avatarIndex {
+    _$avatarIndexAtom.reportRead();
+    return super.avatarIndex;
+  }
+
+  @override
+  set avatarIndex(int value) {
+    _$avatarIndexAtom.reportWrite(value, super.avatarIndex, () {
+      super.avatarIndex = value;
+    });
+  }
+
   late final _$userDataAtom =
       Atom(name: 'UserDataStore.userData', context: context);
 
@@ -259,6 +291,22 @@ mixin _$UserData on UserDataStore, Store {
   set cardList(ObservableList<String> value) {
     _$cardListAtom.reportWrite(value, super.cardList, () {
       super.cardList = value;
+    });
+  }
+
+  late final _$ordersAtom =
+      Atom(name: 'UserDataStore.orders', context: context);
+
+  @override
+  ObservableList<Map<String, dynamic>> get orders {
+    _$ordersAtom.reportRead();
+    return super.orders;
+  }
+
+  @override
+  set orders(ObservableList<Map<String, dynamic>> value) {
+    _$ordersAtom.reportWrite(value, super.orders, () {
+      super.orders = value;
     });
   }
 
@@ -420,10 +468,13 @@ oldPassword: ${oldPassword},
 newPassword: ${newPassword},
 newName: ${newName},
 newSurname: ${newSurname},
+newAvatar: ${newAvatar},
+avatarIndex: ${avatarIndex},
 userData: ${userData},
 cartItems: ${cartItems},
 addressList: ${addressList},
 cardList: ${cardList},
+orders: ${orders},
 totalprice: ${totalprice},
 passVisib: ${passVisib},
 balance: ${balance},

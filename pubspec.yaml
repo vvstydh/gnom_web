@@ -29,18 +29,20 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/empty.png
-    - assets/images/gnom1.jpeg
-    - assets/images/gnom2.jpeg
-    - assets/images/gnom3.jpeg
-    - assets/images/gnom4.jpeg
-    - assets/images/gnom5.jpeg
-    - assets/images/gnom6.jpeg
-    - assets/images/gnom7.jpeg
-    - assets/images/gnom8.jpeg
-    - assets/images/gnom9.jpeg
-    - assets/images/gnom10.png
-    - assets/images/gnom11.png
+    - assets/images/avatars/empty.png
+    - assets/images/avatars/avatar0.JPG
+    - assets/images/avatars/avatar1.JPG
+    - assets/images/gnoms/gnom1.jpeg
+    - assets/images/gnoms/gnom2.jpeg
+    - assets/images/gnoms/gnom3.jpeg
+    - assets/images/gnoms/gnom4.jpeg
+    - assets/images/gnoms/gnom5.jpeg
+    - assets/images/gnoms/gnom6.jpeg
+    - assets/images/gnoms/gnom7.jpeg
+    - assets/images/gnoms/gnom8.jpeg
+    - assets/images/gnoms/gnom9.jpeg
+    - assets/images/gnoms/gnom10.png
+    - assets/images/gnoms/gnom11.png
 
   fonts:
     - family: Nekst

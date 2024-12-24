@@ -24,6 +24,7 @@ class MainApp extends StatelessWidget {
       passCheck.getCart();
       passCheck.loadAdresses();
       passCheck.loadCards();
+      passCheck.fetchOrderHistory(passCheck.user!.id.toString());
     }
     final router = GoRouter(routes: [
       GoRoute(

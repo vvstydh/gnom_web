@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
@@ -57,20 +59,20 @@ class UserPage extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(30),
               children: [
-                CircleAvatar(
-                  radius: 50, // Adjust the size as needed
-                  backgroundImage: NetworkImage(userData.user?.userMetadata?['avatar_url'] ?? ''),
-                  backgroundColor: Colors.white, // Fallback color if no image
+                Observer(
+                  builder: (_) => Container(
+                    height: 100,
+                    width: 100,
+                    child: Image.asset(
+                      'assets/images/avatars/avatar${userData.avatarIndex}.JPG',
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 10), // Add some spacing
-                // Button to change avatar
+                const SizedBox(height: 10),
                 TextButton(
-                  onPressed: () async {
-                    await userData.pickAndUploadAvatar();
-                    if (!context.mounted) return; // Check if the widget is still mounted
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Аватар обновлен')),
-                    );
+                  onPressed: () {
+                    userData.avatarIndex = Random().nextInt(2);
                   },
                   child: const Text(
                     'Изменить аватар',
@@ -254,8 +256,34 @@ class UserPage extends StatelessWidget {
                                   onPressed: () {
                                     userData
                                         .changeEmail(userData.newEmail.text);
-                                    Navigator.of(context).pop();
-                                    context.go('/');
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 35, 27, 144),
+                                        title: const Text(
+                                          'Почта изменена, проверьте новую почту для подтверждения',
+                                          style: TextStyle(
+                                              fontSize: 30,
+                                              color: Colors.white),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              userData.signOut();
+                                              context.go('/');
+                                            },
+                                            child: const Text(
+                                              'Хорошо',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
                                   },
                                   child: const Text(
                                     'Сохранить',
@@ -518,11 +546,40 @@ class UserPage extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
+                Observer(
+                  builder: (_) => ListView.builder(
+                    shrinkWrap: true, // Important for nested ListView
+                    physics:
+                        NeverScrollableScrollPhysics(), // Disable scrolling
+                    itemCount: userData.orders.length,
+                    itemBuilder: (context, index) {
+                      final order = userData.orders[index];
+                      return ListTile(
+                        title: Text(
+                          order['items'].toString(),
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'Nekst',
+                              color: Colors.white),
+                        ), // Adjust according to your Order model
+                        subtitle: Text(
+                          order['order_date'].toString(),
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'Nekst',
+                              color: Colors.white),
+                        ), // Adjust according to your Order model
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
                 Center(
                   child: TextButton(
                       onPressed: () {
                         userData.signOut();
-
                         context.go('/');
                       },
                       child: const Text(

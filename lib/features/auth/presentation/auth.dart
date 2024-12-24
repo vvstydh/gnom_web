@@ -115,9 +115,10 @@ class Auth extends StatelessWidget {
                           }
                         } catch (error) {
                           // Show error message to user
+                          // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Ошибка входа: ${error.toString()}'),
+                            const SnackBar(
+                              content: Text('Ошибка входа не правильный логин или пароль'),
                               backgroundColor: Colors.red,
                             ),
                           );

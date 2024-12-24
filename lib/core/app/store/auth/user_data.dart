@@ -48,6 +48,12 @@ abstract class UserDataStore with Store {
   @observable
   var newSurname = TextEditingController();
 
+  @observable
+  String newAvatar = 'avatar${1}.JPG';
+
+  @observable
+  var avatarIndex = 1;
+
   // ignore: avoid_init_to_null
   User? user = null;
 
@@ -68,6 +74,10 @@ abstract class UserDataStore with Store {
   ObservableList<String> cardList = ObservableList<String>();
 
   @observable
+  ObservableList<Map<String, dynamic>> orders =
+      ObservableList<Map<String, dynamic>>();
+
+  @observable
   int totalprice = 0;
 
   @observable
@@ -84,17 +94,17 @@ abstract class UserDataStore with Store {
 
   @observable
   List<String> imagePath = [
-    'assets/images/gnom1.jpeg',
-    'assets/images/gnom2.jpeg',
-    'assets/images/gnom3.jpeg',
-    'assets/images/gnom4.jpeg',
-    'assets/images/gnom5.jpeg',
-    'assets/images/gnom6.jpeg',
-    'assets/images/gnom7.jpeg',
-    'assets/images/gnom8.jpeg',
-    'assets/images/gnom9.jpeg',
-    'assets/images/gnom10.png',
-    'assets/images/gnom11.png'
+    'assets/images/gnoms/gnom1.jpeg',
+    'assets/images/gnoms/gnom2.jpeg',
+    'assets/images/gnoms/gnom3.jpeg',
+    'assets/images/gnoms/gnom4.jpeg',
+    'assets/images/gnoms/gnom5.jpeg',
+    'assets/images/gnoms/gnom6.jpeg',
+    'assets/images/gnoms/gnom7.jpeg',
+    'assets/images/gnoms/gnom8.jpeg',
+    'assets/images/gnoms/gnom9.jpeg',
+    'assets/images/gnoms/gnom10.png',
+    'assets/images/gnoms/gnom11.png'
   ];
 
   @observable
@@ -155,6 +165,7 @@ abstract class UserDataStore with Store {
         getUserData();
         getCart();
         loadAdresses();
+        fetchOrderHistory(user!.id);
         clear();
       } else {
         throw Exception('Пользователь не найден');
@@ -190,14 +201,14 @@ abstract class UserDataStore with Store {
           'name': name.text,
           'surname': surname.text,
           'uid': res.user!.id,
-          'created_at': DateTime.now().toIso8601String()
         });
-        signOut();
+
         clear();
       } else {
         throw Exception('Failed to create user');
       }
     } catch (error) {
+      print('Error during sign up: $error');
       rethrow;
     }
   }
@@ -219,7 +230,6 @@ abstract class UserDataStore with Store {
             data: {'email_change_suppress_notification': true},
           ),
         );
-        signOut();
         print('Email updated successfully');
       } else {
         throw Exception('User not authenticated');
@@ -363,8 +373,7 @@ abstract class UserDataStore with Store {
     try {
       await supabase
           .from('userdata')
-          .update({'name': newName})
-          .eq('uid', user!.id);
+          .update({'name': newName}).eq('uid', user!.id);
       await getUserData();
       this.newName.clear();
     } catch (error) {
@@ -376,8 +385,7 @@ abstract class UserDataStore with Store {
     try {
       await supabase
           .from('userdata')
-          .update({'surname': newSurname})
-          .eq('uid', user!.id);
+          .update({'surname': newSurname}).eq('uid', user!.id);
       await getUserData();
       this.newSurname.clear();
     } catch (error) {
@@ -389,10 +397,10 @@ abstract class UserDataStore with Store {
     final bytes = await File(filePath).readAsBytes();
     final fileExt = filePath.split('.').last;
     final fileName = '${user!.id}.$fileExt';
-    
+
     await supabase.storage.from('avatars').uploadBinary(fileName, bytes);
     final imageUrl = supabase.storage.from('avatars').getPublicUrl(fileName);
-    
+
     await supabase.auth.updateUser(
       UserAttributes(
         data: {'avatar_url': imageUrl},
@@ -400,37 +408,35 @@ abstract class UserDataStore with Store {
     );
   }
 
-  Future<void> pickAndUploadAvatar() async {
-    try {
-      // Use FilePicker for web compatibility
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        withData: true,
-      );
+  Future<void> placeOrder(String paymentMethod, String? address) async {
+    if (address == null || address.isEmpty) {
+      throw Exception('Address cannot be null or empty');
+    }
 
-      if (result != null && result.files.single.bytes != null) {
-        final fileBytes = result.files.single.bytes!;
-        final fileName = result.files.single.name;
-        print('File picked: $fileName');
-        await uploadAvatarWeb(fileBytes, fileName);
-        print('File uploaded successfully');
-      } else {
-        print('No file selected');
-      }
-    } catch (e) {
-      print('Error picking or uploading file: $e');
+    if (cartItems.isEmpty) {
+    } else {
+      final orderDetails = {
+        'user_id': user!.id,
+        'items': cartItems.map((item) => item['name']).toList(),
+        'total_price': totalprice,
+        'payment_method': paymentMethod,
+        'address': address,
+        'order_date': DateTime.now().toIso8601String(),
+      };
+
+      await supabase.from('orders').insert(orderDetails);
+      final cart = Cart();
+      await cart.clearCart(user!.id.toString());
+      cartItems.clear();
+      countPrice();
+      fetchOrderHistory(user!.id.toString());
     }
   }
 
-  Future<void> uploadAvatarWeb(Uint8List fileBytes, String fileName) async {
-    // Assuming you have a method to handle the upload for web
-    await supabase.storage.from('avatars').uploadBinary(fileName, fileBytes);
-    final imageUrl = supabase.storage.from('avatars').getPublicUrl(fileName);
-
-    await supabase.auth.updateUser(
-      UserAttributes(
-        data: {'avatar_url': imageUrl},
-      ),
-    );
+  Future<void> fetchOrderHistory(String userId) async {
+    final response =
+        await supabase.from('orders').select('*').eq('user_id', userId);
+    orders.addAll(List<Map<String, dynamic>>.from(response));
+    print(orders);
   }
 }

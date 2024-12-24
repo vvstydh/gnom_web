@@ -3,9 +3,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth/user_data.dart';
 import 'package:web_gnom/core/app/store/cart/cart.dart';
+import 'package:web_gnom/core/app/store/order_form/order_form_store.dart';
 import 'package:web_gnom/features/regist/presentation/widgets/alert_reg.dart';
 import 'package:web_gnom/features/cart/presentation/widgets/alert_clear_cart.dart';
 import 'package:web_gnom/features/cart/presentation/widgets/cart_list_item.dart';
+import 'package:web_gnom/features/cart/presentation/widgets/order_form.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key, required this.passCheck, required this.cart});
@@ -14,6 +16,8 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final orderFormStore = OrderFormStore();
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 35, 27, 144),
       body: Column(
@@ -169,20 +173,14 @@ class CartPage extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                if (passCheck.balance >= passCheck.totalprice) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => const AlertReg(
-                                            alertText:
-                                                'Заказ успешно оформлен, ждите, может когда-нибудь придет :(',
-                                          ));
-                                } else {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => const AlertReg(
-                                            alertText: 'Недостаточно средств!',
-                                          ));
-                                }
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      OrderForm(
+                                        userData: passCheck,
+                                        orderFormStore: orderFormStore,
+                                      ),
+                                );
                               },
                               child: const Text(
                                 'Оформить заказ',
@@ -264,7 +262,15 @@ class CartPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => OrderForm(
+                            userData: passCheck,
+                            orderFormStore: orderFormStore,
+                          ),
+                        );
+                      },
                       child: const Text(
                         'Оформить заказ',
                         style: TextStyle(
