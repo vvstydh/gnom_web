@@ -3,11 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth/user_data.dart';
 import 'package:web_gnom/core/app/store/cart/cart.dart';
 import 'package:web_gnom/core/app/store/gnoms_list/gnoms_list.dart';
+import 'package:web_gnom/core/app/store/whaitlist/whaitlist.dart';
 import 'package:web_gnom/features/auth/presentation/auth.dart';
 import 'package:web_gnom/features/cart/presentation/pages/cart_page.dart';
 import 'package:web_gnom/features/main_page/presentation/pages/main_page.dart';
 import 'package:web_gnom/features/regist/presentation/pages/regist.dart';
 import 'package:web_gnom/features/user_page/presentation/pages/user_page.dart';
+import 'package:web_gnom/features/whaitlist/presentation/pages/whaitlist_page.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -17,7 +19,8 @@ class MainApp extends StatelessWidget {
     final passCheck = UserData();
     final cart = Cart();
     final gnomList = GnomsList();
-    
+    final whaitlist = Whaitlist();
+
     passCheck.userCheck();
     if (passCheck.user != null) {
       passCheck.getUserData();
@@ -33,6 +36,7 @@ class MainApp extends StatelessWidget {
           userData: passCheck,
           cart: cart,
           gnomList: gnomList,
+          whaitlist: whaitlist,
         ),
       ),
       GoRoute(
@@ -54,11 +58,19 @@ class MainApp extends StatelessWidget {
         ),
       ),
       GoRoute(
-          path: '/cart',
-          builder: (context, state) => CartPage(
-                passCheck: passCheck,
-                cart: cart,
-              ))
+        path: '/cart',
+        builder: (context, state) => CartPage(
+          passCheck: passCheck,
+          cart: cart,
+        ),
+      ),
+      GoRoute(
+        path: '/whaitlist',
+        builder: (context, state) => WhaitlistPage(
+          passCheck: passCheck,
+          whaitlist: whaitlist,
+        ),
+      ),
     ]);
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,

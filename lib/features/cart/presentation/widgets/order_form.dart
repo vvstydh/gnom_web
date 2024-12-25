@@ -113,6 +113,8 @@ class OrderForm extends StatelessWidget {
           onPressed: () async {
             await userData.placeOrder(
                 orderFormStore.paymentMethod, orderFormStore.selectedAddress);
+            await userData
+                .sendOrderConfirmationEmail(userData.user!.email.toString());
             // ignore: use_build_context_synchronously
             Navigator.pop(context);
             showDialog(
@@ -147,3 +149,7 @@ class OrderForm extends StatelessWidget {
     );
   }
 }
+
+
+//axM7tRUwJcndJ4d
+

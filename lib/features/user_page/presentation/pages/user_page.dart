@@ -9,7 +9,6 @@ import 'package:web_gnom/features/user_page/presentation/widgets/alert_adress_ad
 import 'package:web_gnom/features/user_page/presentation/widgets/alert_adress_editing.dart';
 import 'package:web_gnom/features/user_page/presentation/widgets/alert_cards_addition%20copy.dart';
 import 'package:web_gnom/features/user_page/presentation/widgets/alert_cards_editing%20copy.dart';
-import 'package:image_picker/image_picker.dart';
 
 class UserPage extends StatelessWidget {
   const UserPage({super.key, required this.userData});
@@ -123,7 +122,7 @@ class UserPage extends StatelessWidget {
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text(
-                                    'Сохран��ть',
+                                    'Сохранить',
                                     style: TextStyle(
                                         fontSize: 20, color: Colors.white),
                                   ),
@@ -546,11 +545,19 @@ class UserPage extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
+                const Text(
+                  'История заказов',
+                  style: TextStyle(
+                      fontSize: 25, fontFamily: 'Nekst', color: Colors.white),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
                 Observer(
                   builder: (_) => ListView.builder(
                     shrinkWrap: true, // Important for nested ListView
                     physics:
-                        NeverScrollableScrollPhysics(), // Disable scrolling
+                        const NeverScrollableScrollPhysics(), // Disable scrolling
                     itemCount: userData.orders.length,
                     itemBuilder: (context, index) {
                       final order = userData.orders[index];
@@ -588,18 +595,6 @@ class UserPage extends StatelessWidget {
                             TextStyle(fontFamily: 'Nekst', color: Colors.white),
                       )),
                 ),
-                Center(
-                  child: TextButton(
-                      onPressed: () {
-                        userData.deleteAccount();
-                        context.go('/');
-                      },
-                      child: const Text(
-                        'Удалить аккаунт',
-                        style:
-                            TextStyle(fontFamily: 'Nekst', color: Colors.white),
-                      )),
-                )
               ],
             ),
           ),

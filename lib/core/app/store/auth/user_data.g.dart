@@ -262,6 +262,22 @@ mixin _$UserData on UserDataStore, Store {
     });
   }
 
+  late final _$whaitlistItemsAtom =
+      Atom(name: 'UserDataStore.whaitlistItems', context: context);
+
+  @override
+  ObservableList<Map<String, dynamic>> get whaitlistItems {
+    _$whaitlistItemsAtom.reportRead();
+    return super.whaitlistItems;
+  }
+
+  @override
+  set whaitlistItems(ObservableList<Map<String, dynamic>> value) {
+    _$whaitlistItemsAtom.reportWrite(value, super.whaitlistItems, () {
+      super.whaitlistItems = value;
+    });
+  }
+
   late final _$addressListAtom =
       Atom(name: 'UserDataStore.addressList', context: context);
 
@@ -472,6 +488,7 @@ newAvatar: ${newAvatar},
 avatarIndex: ${avatarIndex},
 userData: ${userData},
 cartItems: ${cartItems},
+whaitlistItems: ${whaitlistItems},
 addressList: ${addressList},
 cardList: ${cardList},
 orders: ${orders},

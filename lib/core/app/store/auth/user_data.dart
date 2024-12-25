@@ -1,11 +1,12 @@
-import 'package:email_sender/email_sender.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:web_gnom/core/app/store/cart/cart.dart';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
-import 'dart:typed_data';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import 'package:web_gnom/core/app/store/whaitlist/whaitlist.dart';
 
 part 'user_data.g.dart';
 
@@ -65,6 +66,10 @@ abstract class UserDataStore with Store {
 
   @observable
   ObservableList<Map<String, dynamic>> cartItems =
+      ObservableList<Map<String, dynamic>>();
+
+  @observable
+  ObservableList<Map<String, dynamic>> whaitlistItems =
       ObservableList<Map<String, dynamic>>();
 
   @observable
@@ -137,14 +142,6 @@ abstract class UserDataStore with Store {
     '750'
   ];
 
-  void sendMail() async {
-    EmailSender emailsender = EmailSender();
-    //Enter your email in send method
-    var response = await emailsender.sendMessage(
-        "toemail@gmail.com", "title", "subject", "body");
-    print(response["message"]);
-  }
-
   @action
   void changerPass() {
     passVisib = !passVisib;
@@ -166,6 +163,7 @@ abstract class UserDataStore with Store {
         getCart();
         loadAdresses();
         fetchOrderHistory(user!.id);
+        getWhaitlist();
         clear();
       } else {
         throw Exception('Пользователь не найден');
@@ -188,6 +186,12 @@ abstract class UserDataStore with Store {
     print(cartItems);
   }
 
+  Future<void> getWhaitlist() async {
+    whaitlistItems.clear();
+    whaitlistItems.addAll(await Whaitlist().fetchWhaitlistItems(user!.id));
+    print(whaitlistItems);
+  }
+
   Future<void> signUp() async {
     try {
       final AuthResponse res = await supabase.auth.signUp(
@@ -202,7 +206,6 @@ abstract class UserDataStore with Store {
           'surname': surname.text,
           'uid': res.user!.id,
         });
-
         clear();
       } else {
         throw Exception('Failed to create user');
@@ -218,6 +221,7 @@ abstract class UserDataStore with Store {
     user = null;
     userData = null;
     cartItems.clear();
+    whaitlistItems.clear();
   }
 
   Future<void> changeEmail(String newEmail) async {
@@ -264,12 +268,6 @@ abstract class UserDataStore with Store {
       totalprice += int.parse(item['price'].toString()) *
           int.parse(item['count'].toString());
     }
-  }
-
-  void deleteAccount() async {
-    await supabase.from('userdata').delete().eq('uid', user!.id);
-    clear();
-    signOut();
   }
 
   void clear() {
@@ -439,4 +437,34 @@ abstract class UserDataStore with Store {
     orders.addAll(List<Map<String, dynamic>>.from(response));
     print(orders);
   }
+
+  Future<void> sendOrderConfirmationEmail(String email) async {
+    final String apiKey = 'c5ef7e42740bc594be62e9feea511fcb-2e68d0fb-92fdc4c5'; // Replace with your Mailgun API key
+    final String domain = 'sandboxbe96a1e711954866bfc3803d82b42af8.mailgun.org'; // Replace with your Mailgun domain
+    final String fromEmail = 'budkodanila50@gmail.com'; // Replace with your verified sender email
+
+    final url = Uri.parse('https://api.mailgun.net/v3/$domain/messages');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Basic ' + base64Encode(utf8.encode('api:$apiKey')),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'from': fromEmail,
+        'to': email,
+        'subject': 'Order Confirmation',
+        'text': 'Your order is being processed. Thank you for your purchase!',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print('Email sent to $email');
+    } else {
+      print('Failed to send email: ${response.body}');
+    }
+  }
+
+// Basic Authentication helper
 }

@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:web_gnom/core/app/store/auth/user_data.dart';
 
-class ListItem extends StatelessWidget {
-  const ListItem(
-      {super.key,
-      required this.path,
-      required this.name,
-      required this.price,
-      required this.userData,
-      required this.icon,
-      required this.iconWhaitlist,
-      this.onClick,
-      this.onClickWhaitlist});
+class WhaitlistListCartItem extends StatelessWidget {
+  const WhaitlistListCartItem({
+    super.key,
+    required this.path,
+    required this.name,
+    required this.price,
+    required this.userData,
+    required this.icon,
+    this.onClick,
+  });
   final String path;
   final String name;
   final String price;
   final UserData userData;
   final IconData icon;
-  final IconData iconWhaitlist;
   final VoidCallback? onClick;
-  final VoidCallback? onClickWhaitlist;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +40,10 @@ class ListItem extends StatelessWidget {
                           bottomRight: Radius.circular(30),
                           topRight: Radius.circular(30),
                           bottomLeft: Radius.circular(30)),
-                      child: Image.asset(path, fit: BoxFit.fill,))),
+                      child: Image.asset(
+                        path,
+                        fit: BoxFit.fill,
+                      ))),
               Container(
                   margin: const EdgeInsets.only(left: 25),
                   child: Row(
@@ -52,7 +52,7 @@ class ListItem extends StatelessWidget {
                       Text(
                         name,
                         style: const TextStyle(
-                          fontSize: 35,
+                          fontSize: 25,
                           fontFamily: 'Nekst',
                         ),
                       )
@@ -63,21 +63,16 @@ class ListItem extends StatelessWidget {
           Row(
             children: [
               Container(
-                margin: const EdgeInsets.only(right: 15),
+                margin: const EdgeInsets.only(right: 15, left: 15),
                 child: Text(
                   '$price\$',
                   style: const TextStyle(
-                    fontSize: 35,
+                    fontSize: 25,
                     fontFamily: 'Nekst',
                   ),
                 ),
               ),
-              IconButton(
-                  onPressed: onClickWhaitlist,
-                  icon: Icon(size: 50, iconWhaitlist)),
-              IconButton(
-                  onPressed: onClick,
-                  icon: Icon(size: 50, icon))
+              IconButton(onPressed: onClick, icon: Icon(size: 50, icon))
             ],
           )
         ],

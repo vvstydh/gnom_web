@@ -3,17 +3,20 @@ import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth/user_data.dart';
 import 'package:web_gnom/core/app/store/cart/cart.dart';
 import 'package:web_gnom/core/app/store/gnoms_list/gnoms_list.dart';
+import 'package:web_gnom/core/app/store/whaitlist/whaitlist.dart';
 import 'package:web_gnom/features/main_page/presentation/widgets/list_item.dart';
 
 class MainPage extends StatelessWidget {
   final UserData userData;
   final Cart cart;
+  final Whaitlist whaitlist;
   final GnomsList gnomList;
 
   const MainPage({
     required this.userData,
     required this.cart,
     required this.gnomList,
+    required this.whaitlist,
     super.key,
   });
 
@@ -41,6 +44,16 @@ class MainPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    IconButton(
+                        onPressed: () {
+                          userData.getCart();
+                          context.go('/whaitlist');
+                        },
+                        icon: const Icon(
+                          size: 30,
+                          color: Colors.white,
+                          Icons.star_rounded,
+                        )),
                     IconButton(
                         onPressed: () {
                           userData.getCart();
@@ -82,6 +95,36 @@ class MainPage extends StatelessWidget {
                       price: userData.pricePath[index],
                       userData: userData,
                       icon: Icons.shopping_cart_rounded,
+                      iconWhaitlist: Icons.favorite_border_rounded,
+                      onClickWhaitlist: () async {
+                        if (userData.user != null) {
+                          final isInWhaitlist = await whaitlist.addToWhaitlist(
+                            userData.user?.id,
+                            userData.imagePath[index],
+                            userData.namePath[index],
+                            userData.pricePath[index],
+                          );
+                          if (isInWhaitlist) {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Товар добавлен в желаемое')));
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Товар уже есть в желаемом')));
+                          }
+                          userData.getWhaitlist();
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Войдите в аккаунт')));
+                        }
+                      },
                       onClick: () async {
                         if (userData.user != null) {
                           final isInCart = await cart.addToCart(
@@ -102,6 +145,11 @@ class MainPage extends StatelessWidget {
                                     content: Text('Товар уже есть в корзине')));
                           }
                           userData.getCart();
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Войдите в аккаунт')));
                         }
                       },
                     );
@@ -113,9 +161,7 @@ class MainPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                      onPressed: () {
-                        userData.signOut();
-                      },
+                      onPressed: () {},
                       child: const Text(
                         'Контакты',
                         style: TextStyle(
