@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth/user_data.dart';
 import 'package:web_gnom/core/app/store/cart/cart.dart';
-import 'package:web_gnom/core/app/store/gnoms_list/gnoms_list.dart';
 import 'package:web_gnom/core/app/store/whaitlist/whaitlist.dart';
 import 'package:web_gnom/features/auth/presentation/auth.dart';
 import 'package:web_gnom/features/cart/presentation/pages/cart_page.dart';
@@ -18,7 +17,6 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final passCheck = UserData();
     final cart = Cart();
-    final gnomList = GnomsList();
     final whaitlist = Whaitlist();
 
     passCheck.userCheck();
@@ -35,7 +33,6 @@ class MainApp extends StatelessWidget {
         builder: (context, state) => MainPage(
           userData: passCheck,
           cart: cart,
-          gnomList: gnomList,
           whaitlist: whaitlist,
         ),
       ),

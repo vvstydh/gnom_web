@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth/user_data.dart';
 import 'package:web_gnom/core/app/store/cart/cart.dart';
-import 'package:web_gnom/core/app/store/gnoms_list/gnoms_list.dart';
 import 'package:web_gnom/core/app/store/whaitlist/whaitlist.dart';
 import 'package:web_gnom/features/main_page/presentation/widgets/list_item.dart';
 
@@ -10,12 +9,10 @@ class MainPage extends StatelessWidget {
   final UserData userData;
   final Cart cart;
   final Whaitlist whaitlist;
-  final GnomsList gnomList;
 
   const MainPage({
     required this.userData,
     required this.cart,
-    required this.gnomList,
     required this.whaitlist,
     super.key,
   });

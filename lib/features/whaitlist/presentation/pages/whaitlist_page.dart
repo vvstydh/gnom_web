@@ -2,13 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth/user_data.dart';
-import 'package:web_gnom/core/app/store/cart/cart.dart';
-import 'package:web_gnom/core/app/store/order_form/order_form_store.dart';
 import 'package:web_gnom/core/app/store/whaitlist/whaitlist.dart';
-import 'package:web_gnom/features/regist/presentation/widgets/alert_reg.dart';
 import 'package:web_gnom/features/cart/presentation/widgets/alert_clear_cart.dart';
-import 'package:web_gnom/features/cart/presentation/widgets/cart_list_item.dart';
-import 'package:web_gnom/features/cart/presentation/widgets/order_form.dart';
 import 'package:web_gnom/features/whaitlist/presentation/widgets/whaitlist_list_item.dart';
 
 class WhaitlistPage extends StatelessWidget {

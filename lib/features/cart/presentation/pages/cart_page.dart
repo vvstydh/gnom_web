@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:web_gnom/core/app/store/auth/user_data.dart';
 import 'package:web_gnom/core/app/store/cart/cart.dart';
 import 'package:web_gnom/core/app/store/order_form/order_form_store.dart';
-import 'package:web_gnom/features/regist/presentation/widgets/alert_reg.dart';
 import 'package:web_gnom/features/cart/presentation/widgets/alert_clear_cart.dart';
 import 'package:web_gnom/features/cart/presentation/widgets/cart_list_item.dart';
 import 'package:web_gnom/features/cart/presentation/widgets/order_form.dart';
@@ -182,7 +181,7 @@ class CartPage extends StatelessWidget {
                         'Оформить заказ',
                         style: TextStyle(
                           fontFamily: 'Nekst',
-                          fontSize: 25,
+                          fontSize: 30,
                           fontWeight: FontWeight.w700,
                           color: Color.fromARGB(255, 240, 49, 94),
                         ),

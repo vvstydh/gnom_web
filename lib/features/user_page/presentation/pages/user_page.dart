@@ -59,7 +59,7 @@ class UserPage extends StatelessWidget {
               padding: const EdgeInsets.all(30),
               children: [
                 Observer(
-                  builder: (_) => Container(
+                  builder: (_) => SizedBox(
                     height: 100,
                     width: 100,
                     child: Image.asset(

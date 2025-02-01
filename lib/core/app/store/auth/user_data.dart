@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches, duplicate_ignore
+
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -157,6 +159,7 @@ abstract class UserDataStore with Store {
         email: login.text,
         password: password.text,
       );
+      print(res.user);
       if (res.user != null) {
         user = res.user;
         getUserData();
@@ -169,6 +172,7 @@ abstract class UserDataStore with Store {
         throw Exception('Пользователь не найден');
       }
     } catch (error) {
+      print(error);
       rethrow;
     }
   }
@@ -176,20 +180,18 @@ abstract class UserDataStore with Store {
   Future<void> getUserData() async {
     userData =
         await supabase.from('userdata').select().eq('uid', user!.id).single();
-    print(userData);
   }
 
   Future<void> getCart() async {
     cartItems.clear();
     cartItems.addAll(await Cart().fetchCartItems(user!.id));
-    countPrice();
     print(cartItems);
+    countPrice();
   }
 
   Future<void> getWhaitlist() async {
     whaitlistItems.clear();
     whaitlistItems.addAll(await Whaitlist().fetchWhaitlistItems(user!.id));
-    print(whaitlistItems);
   }
 
   Future<void> signUp() async {
@@ -198,7 +200,6 @@ abstract class UserDataStore with Store {
         email: login.text,
         password: password.text,
       );
-
       if (res.user != null) {
         await signIn();
         await supabase.from('userdata').insert({
@@ -211,7 +212,7 @@ abstract class UserDataStore with Store {
         throw Exception('Failed to create user');
       }
     } catch (error) {
-      print('Error during sign up: $error');
+      print(error);
       rethrow;
     }
   }
@@ -234,13 +235,11 @@ abstract class UserDataStore with Store {
             data: {'email_change_suppress_notification': true},
           ),
         );
-        print('Email updated successfully');
       } else {
         throw Exception('User not authenticated');
       }
-    } catch (error) {
-      print('Failed to update email: $error');
-    }
+      // ignore: empty_catches
+    } catch (error) {}
   }
 
   Future<void> changePassword(String newP) async {
@@ -282,27 +281,20 @@ abstract class UserDataStore with Store {
   Future<void> addAdress(String address) async {
     addressList.add(address);
     await updateAdressesInDatabase();
-    print(addressList);
   }
 
   Future<void> modifyAddress(int index, String newAddress) async {
     if (index >= 0 && index < addressList.length) {
       addressList[index] = newAddress;
       await updateAdressesInDatabase();
-      print(addressList);
-    } else {
-      print('Invalid index');
-    }
+    } else {}
   }
 
   Future<void> deleteAddress(int index) async {
     if (index >= 0 && index < addressList.length) {
       addressList.removeAt(index);
       await updateAdressesInDatabase();
-      print(addressList);
-    } else {
-      print('Invalid index');
-    }
+    } else {}
   }
 
   Future<void> loadAdresses() async {
@@ -313,7 +305,6 @@ abstract class UserDataStore with Store {
     if (userData['adresses'] != null) {
       addressList.addAll(userData['adresses'].split(',').toList());
     }
-    print(addressList);
   }
 
   Future<void> updateAdressesInDatabase() async {
@@ -326,27 +317,20 @@ abstract class UserDataStore with Store {
   Future<void> addCard(String card) async {
     cardList.add(card);
     await updateCardsInDatabase();
-    print(cardList);
   }
 
   Future<void> modifyCard(int index, String newCard) async {
     if (index >= 0 && index < cardList.length) {
       cardList[index] = newCard;
       await updateCardsInDatabase();
-      print(cardList);
-    } else {
-      print('Invalid index');
-    }
+    } else {}
   }
 
   Future<void> deleteCard(int index) async {
     if (index >= 0 && index < cardList.length) {
       cardList.removeAt(index);
       await updateCardsInDatabase();
-      print(cardList);
-    } else {
-      print('Invalid index');
-    }
+    } else {}
   }
 
   Future<void> loadCards() async {
@@ -357,7 +341,6 @@ abstract class UserDataStore with Store {
     if (userData['cards'] != null) {
       cardList.addAll(userData['cards'].split(',').toList());
     }
-    print(cardList);
   }
 
   Future<void> updateCardsInDatabase() async {
@@ -374,9 +357,7 @@ abstract class UserDataStore with Store {
           .update({'name': newName}).eq('uid', user!.id);
       await getUserData();
       this.newName.clear();
-    } catch (error) {
-      print('Failed to update name: $error');
-    }
+    } catch (error) {}
   }
 
   Future<void> changeSurname(String newSurname) async {
@@ -386,9 +367,7 @@ abstract class UserDataStore with Store {
           .update({'surname': newSurname}).eq('uid', user!.id);
       await getUserData();
       this.newSurname.clear();
-    } catch (error) {
-      print('Failed to update surname: $error');
-    }
+    } catch (error) {}
   }
 
   Future<void> uploadAvatar(String filePath) async {
@@ -437,34 +416,5 @@ abstract class UserDataStore with Store {
     orders.addAll(List<Map<String, dynamic>>.from(response));
     print(orders);
   }
-
-  Future<void> sendOrderConfirmationEmail(String email) async {
-    final String apiKey = 'c5ef7e42740bc594be62e9feea511fcb-2e68d0fb-92fdc4c5'; // Replace with your Mailgun API key
-    final String domain = 'sandboxbe96a1e711954866bfc3803d82b42af8.mailgun.org'; // Replace with your Mailgun domain
-    final String fromEmail = 'budkodanila50@gmail.com'; // Replace with your verified sender email
-
-    final url = Uri.parse('https://api.mailgun.net/v3/$domain/messages');
-
-    final response = await http.post(
-      url,
-      headers: {
-        'Authorization': 'Basic ' + base64Encode(utf8.encode('api:$apiKey')),
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: {
-        'from': fromEmail,
-        'to': email,
-        'subject': 'Order Confirmation',
-        'text': 'Your order is being processed. Thank you for your purchase!',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      print('Email sent to $email');
-    } else {
-      print('Failed to send email: ${response.body}');
-    }
-  }
-
 // Basic Authentication helper
 }

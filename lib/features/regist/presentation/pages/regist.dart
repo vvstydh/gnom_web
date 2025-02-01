@@ -157,6 +157,14 @@ class Regist extends StatelessWidget {
                               builder: (context) => const AlertReg(
                                     alertText: 'Пароли не совпадают!',
                                   ));
+                        } else if (registration.password.text.length < 6 ||
+                            registration.checkPassword.text.length < 6) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => const AlertReg(
+                                    alertText:
+                                        'Пароль должен быть больше шести символов!',
+                                  ));
                         } else if (registration.name.text.isEmpty ||
                             registration.surname.text.isEmpty ||
                             registration.password.text.isEmpty ||
@@ -168,8 +176,28 @@ class Regist extends StatelessWidget {
                                     alertText: 'Заполни все поля!',
                                   ));
                         } else {
-                          registration.signUp();
-                          context.go('/');
+                          try {
+                            await registration.signUp();
+                            if (registration.user == null) {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text('Пользователь существует')));
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              context.go('/');
+                            }
+                          } catch (error) {
+                            // Show error message to user
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Пользователь существует'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
                         }
                       },
                       child: const Text(

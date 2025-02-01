@@ -44,11 +44,11 @@ class OrderForm extends StatelessWidget {
               value: orderFormStore.paymentMethod,
               dropdownColor: const Color.fromARGB(255, 35, 27, 144),
               items: [
-                DropdownMenuItem<String>(
+                const DropdownMenuItem<String>(
                   value: 'cash',
                   child: Text(
                     'Наличные',
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
                 ...userData.cardList.map((String card) {
@@ -59,7 +59,7 @@ class OrderForm extends StatelessWidget {
                       style: const TextStyle(color: Colors.white),
                     ),
                   );
-                }).toList(),
+                }),
               ],
               onChanged: (String? newValue) {
                 orderFormStore.setPaymentMethod(newValue!);
@@ -91,18 +91,18 @@ class OrderForm extends StatelessWidget {
           const SizedBox(height: 10),
           // Add TextField for user comment
           Observer(
-            builder: (_) => TextField(
+            builder: (_) => const TextField(
               decoration: InputDecoration(
                 hintText: 'Введите комментарий',
-                hintStyle: const TextStyle(color: Colors.white54),
+                hintStyle: TextStyle(color: Colors.white54),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.white),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.white),
                 ),
               ),
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white),
             ),
           ),
           const SizedBox(height: 10),
@@ -113,8 +113,7 @@ class OrderForm extends StatelessWidget {
           onPressed: () async {
             await userData.placeOrder(
                 orderFormStore.paymentMethod, orderFormStore.selectedAddress);
-            await userData
-                .sendOrderConfirmationEmail(userData.user!.email.toString());
+
             // ignore: use_build_context_synchronously
             Navigator.pop(context);
             showDialog(
